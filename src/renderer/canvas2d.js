@@ -277,6 +277,29 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
 
       }
 
+      for (let i = 0; i < imgData.length; i += 4) {
+        if (imgData[i + 3] == 0) {
+          imgData[i + 0] = 0;
+          imgData[i + 1] = 0;
+          imgData[i + 2] = 0;
+          imgData[i + 3] = 255;
+        }
+      }
+
+      for (let i = 0; i < imgData.length; i += 4) {
+        const red = imgData[i + 0];
+        const green = imgData[i + 1];
+        const blue = imgData[i + 2];
+        if (green < 50 && red > 200 && blue < 50) {
+          // imgData[i + 3] = 0;
+          imgData[i + 0] = 255;
+          imgData[i + 1] = 255;
+          imgData[i + 2] = 255;
+          imgData[i + 3] = 0;
+        }
+      }
+
+
       this.ctx.putImageData(img, x, y);
 
       this._renderBoundaries = [1000, 1000, 0, 0];

@@ -2,9 +2,9 @@
  * heatmap.js v2.0.5 | JavaScript Heatmap Library
  *
  * Copyright 2008-2016 Patrick Wied <heatmapjs@patrick-wied.at> - All rights reserved.
- * Dual licensed under MIT and Beerware license
+ * Dual licensed under MIT and Beerware license 
  *
- * :: 2016-09-05 01:16
+ * :: 2023-10-06 13:35
  */
 ;(function (name, context, factory) {
 
@@ -21,15 +21,15 @@
 
 // Heatmap Config stores default values and will be merged with instance config
 var HeatmapConfig = {
-  defaultRadius: 40,
+  defaultRadius: 90,
   defaultRenderer: 'canvas2d',
-  defaultGradient: { 0.25: "rgb(0,0,255)", 0.55: "rgb(0,255,0)", 0.85: "yellow", 1.0: "rgb(255,0,0)"},
+  defaultGradient: { 0.1: "rgb(0,0,0)", 0.25: "rgb(0,0,255)", 0.55: "rgb(0,255,0)", 0.85: "yellow", 1.0: "rgb(255,0,0)"},
   defaultMaxOpacity: 1,
-  defaultMinOpacity: 0,
+  defaultMinOpacity: 1,
   defaultBlur: .85,
   defaultXField: 'x',
   defaultYField: 'y',
-  defaultValueField: 'value',
+  defaultValueField: 'value', 
   plugins: {}
 };
 var Store = (function StoreClosure() {
@@ -91,13 +91,13 @@ var Store = (function StoreClosure() {
           }
           return false;
         } else {
-          return {
-            x: x,
+          return { 
+            x: x, 
             y: y,
-            value: value,
+            value: value, 
             radius: radius,
             min: min,
-            max: max
+            max: max 
           };
         }
     },
@@ -138,7 +138,7 @@ var Store = (function StoreClosure() {
           this.addData.call(this, dataArr[dataLen]);
         }
       } else {
-        // add to store
+        // add to store  
         var organisedEntry = this._organiseData(arguments[0], true);
         if (organisedEntry) {
           // if it's the first datapoint initialize the extremas with it
@@ -168,7 +168,7 @@ var Store = (function StoreClosure() {
       }
       this._max = data.max;
       this._min = data.min || 0;
-
+      
       this._onExtremaChange();
       this._coordinator.emit('renderall', this._getInternalData());
       return this;
@@ -192,11 +192,11 @@ var Store = (function StoreClosure() {
       this._coordinator = coordinator;
     },
     _getInternalData: function() {
-      return {
+      return { 
         max: this._max,
-        min: this._min,
+        min: this._min, 
         data: this._data,
-        radi: this._radi
+        radi: this._radi 
       };
     },
     getData: function() {
@@ -230,7 +230,7 @@ var Store = (function StoreClosure() {
                 }
               } else {
                 continue;
-              }
+              } 
             }
           }
         }
@@ -523,6 +523,29 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
         imgData[i] = useGradientOpacity ? palette[offset + 3] : finalAlpha;
 
       }
+
+      for (let i = 0; i < imgData.length; i += 4) {
+        if (imgData[i + 3] == 0) {
+          imgData[i + 0] = 0;
+          imgData[i + 1] = 0;
+          imgData[i + 2] = 0;
+          imgData[i + 3] = 255;
+        }
+      }
+
+      for (let i = 0; i < imgData.length; i += 4) {
+        const red = imgData[i + 0];
+        const green = imgData[i + 1];
+        const blue = imgData[i + 2];
+        if (green < 50 && red > 200 && blue < 50) {
+          // imgData[i + 3] = 0;
+          imgData[i + 0] = 255;
+          imgData[i + 1] = 255;
+          imgData[i + 2] = 255;
+          imgData[i + 3] = 0;
+        }
+      }
+
 
       this.ctx.putImageData(img, x, y);
 
