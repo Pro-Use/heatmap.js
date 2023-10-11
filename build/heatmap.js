@@ -4,7 +4,7 @@
  * Copyright 2008-2016 Patrick Wied <heatmapjs@patrick-wied.at> - All rights reserved.
  * Dual licensed under MIT and Beerware license 
  *
- * :: 2023-10-06 13:35
+ * :: 2023-10-11 15:44
  */
 ;(function (name, context, factory) {
 
@@ -533,13 +533,13 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
         }
       }
 
-      // TRANSPARENCY FILTER CUSTOMISATION
+      // FILTER MAX COLOUR -> TRANSPARENT HERE
 
       for (let i = 0; i < imgData.length; i += 4) {
         const red = imgData[i + 0];
         const green = imgData[i + 1];
         const blue = imgData[i + 2];
-        if (green < 198 && red > 147 && blue < 93) {
+        if (green > 140 && red < 53 && blue > 138) {
           // imgData[i + 3] = 0;
           imgData[i + 0] = 255;
           imgData[i + 1] = 255;
